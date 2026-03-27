@@ -94,13 +94,18 @@ def check_db():
 # ── App ───────────────────────────────────────────────────────────────────────
 app = FastAPI(title="SchemaIQ Dynamic DB API")
 
+origins = [
+    "http://localhost:5173", "http://127.0.0.1:5173",
+    "http://localhost:5174", "http://127.0.0.1:5174",
+    "https://schemaiqdashboard.netlify.app",
+]
+frontend_url = os.getenv("FRONTEND_URL", "")
+if frontend_url and frontend_url not in origins:
+    origins.append(frontend_url)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173", "http://127.0.0.1:5173",
-        "http://localhost:5174", "http://127.0.0.1:5174",
-        "https://schemaiqdashboard.netlify.app"
-    ],
+    allow_origins=origins,
     allow_methods=["*"],
     allow_headers=["*"],
     allow_credentials=True,
@@ -258,6 +263,9 @@ class ChatResponse(BaseModel):
     row_count:  Optional[int]  = None
     error:      Optional[str]  = None
 
+class SuggestionsResponse(BaseModel):
+    suggestions: list
+
 # ── Routes ────────────────────────────────────────────────────────────────────
 @app.get("/")
 def root():
@@ -268,10 +276,8 @@ def health():
     db_ok = db_state.engine is not None
     api_ok = bool(API_KEY)
     return {
-        "db_connected": db_ok,
-        "api_key_set": api_ok,
         "db": db_ok,
-        "anthropic_api": api_ok,
+        "api_key_set": api_ok,
         "ready": db_ok and api_ok,
     }
 
@@ -381,6 +387,60 @@ def get_schema():
         })
 
     return {"tables": tables, "relationships": relationships}
+
+@app.get("/api/suggestions", response_model=SuggestionsResponse)
+def get_suggestions():
+    check_db()
+    try:
+        client = get_client()
+        schema = generate_dynamic_schema_prompt()
+        
+        prompt = schema + """
+        
+        Task: Based on the database schema above, suggest 5 highly specific and interesting natural language questions a business user might ask this EXACT database.
+        
+        Guidelines:
+        - Use REAL table and column names from the schema.
+        - Vary the complexity (e.g., one simple count, two aggregations/rankings, one time-series trend, one joined query).
+        - Focus on business value (revenue, customers, growth, performance).
+        
+        Example of GOOD, detailed questions:
+        - "What are the top 5 product categories by total revenue in 2023?"
+        - "Which city has the highest number of repeat customers?"
+        - "How has the average order value changed month-over-month?"
+        - "Who are the top 10 sellers by delivery performance (average shipping time)?"
+        
+        Return ONLY a valid JSON object — no markdown, no code fences:
+        {
+          "suggestions": [
+            "Actual question 1...",
+            "Actual question 2...",
+            ...
+          ]
+        }
+        """
+        
+        resp = client.generate_content(prompt)
+        raw  = clean_json(resp.text)
+        data = json.loads(raw)
+        
+        # If AI returns empty or generic junk, return a better default
+        suggestions = data.get("suggestions", [])
+        if not suggestions or len(suggestions) < 3:
+            raise ValueError("AI returned too few suggestions")
+            
+        return SuggestionsResponse(suggestions=suggestions)
+    except Exception as e:
+        print(f"Failed to generate suggestions: {e}")
+        traceback.print_exc()
+        # Better fallback that is slightly more "active"
+        return SuggestionsResponse(suggestions=[
+            "Show me a summary of my tables",
+            "What are the top 5 records in my most populated table?",
+            "How many rows are there in each table?",
+            "Show me a distribution of values in a key column",
+            "Are there any NULL values in my primary tables?"
+        ])
 
 @app.get("/profile")
 def get_profile():

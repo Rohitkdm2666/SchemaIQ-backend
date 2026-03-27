@@ -1,176 +1,116 @@
-# SchemaIQ Backend — Setup Guide
+# SchemaIQ Backend — AI Database Intelligence API
 
-## Architecture
+> FastAPI + SQLAlchemy + Gemini API · Dynamic DB connections · AI-powered schema analysis
 
-```
-React Frontend (port 5173)
-        ↓ POST /chat
-FastAPI Backend (port 8000)
-        ↓
-Google Gemini API (generates SQL)
-        ↓
-SQLite DB (Olist CSVs)
-        ↓
-Real query results → Gemini formats → Frontend renders
-```
+## 🚀 Quick Start
 
----
-
-## Step 1 — Download the Olist Dataset
-
-1. Go to: https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
-2. Download and extract the ZIP
-3. Create a `data/` folder inside `schemaiq-backend/`
-4. Copy all 9 CSV files into `schemaiq-backend/data/`
-
-You need these files:
-```
-schemaiq-backend/data/
-  olist_customers_dataset.csv
-  olist_orders_dataset.csv
-  olist_order_items_dataset.csv
-  olist_order_payments_dataset.csv
-  olist_order_reviews_dataset.csv
-  olist_products_dataset.csv
-  olist_sellers_dataset.csv
-  olist_geolocation_dataset.csv
-  product_category_name_translation.csv
-```
-
----
-
-## Step 2 — Set up Python environment
-
-```powershell
-cd schemaiq-backend
-
-# Create virtual environment
+### 1. Set up Python environment
+```bash
 python -m venv venv
 
-# Activate it (Windows PowerShell)
+# Windows PowerShell
 .\venv\Scripts\Activate.ps1
-
-# Activate it (Mac/Linux)
+# macOS / Linux
 source venv/bin/activate
 
-# Install dependencies
 pip install -r requirements.txt
 ```
 
----
-
-## Step 3 — Set your API key
-
-```powershell
-# Copy the example env file
-copy .env.example .env
-
-# Open .env and paste your Gemini API key
-# Get one from: https://aistudio.google.com/app/apikey
+### 2. Configure environment
+```bash
+cp .env.example .env
+# Edit .env and add your Google AI API key
 ```
 
 Your `.env` should look like:
 ```
-GEMINI_API_KEY=your-gemini-api-key-here
+GEMINI_API_KEY=AIzaSy...
 ```
 
-If you deploy on Render, set `GEMINI_API_KEY` and `DATABASE_URL` under service environment variables.
+### 3. Start the server
+```bash
+uvicorn main:app --reload --port 8001
+```
+
+Health check: http://localhost:8001/health
 
 ---
 
-## Step 4 — Load the Olist CSVs into SQLite
+## 🌐 API Endpoints
 
-```powershell
-python load_data.py --data ./data
-```
-
-Expected output:
-```
-⏳ Loading olist_customers_dataset.csv → customers... ✓  99,441 rows
-⏳ Loading olist_orders_dataset.csv → orders...       ✓  99,441 rows
-⏳ Loading olist_order_items_dataset.csv → order_items... ✓  112,650 rows
-...
-✅ Done! 1,618,689 total rows → olist.db (142.3 MB)
-```
-
-This creates `olist.db` — a local SQLite database with all 9 tables and indexes.
-
----
-
-## Step 5 — Start the backend
-
-```powershell
-# Make sure venv is activated
-uvicorn main:app --reload --port 8000
-```
-
-Check it's running: http://localhost:8000
-Health check: http://localhost:8000/health
-
-Expected:
-```json
-{"db": true, "anthropic_api": true, "ready": true}
-```
+| Method | Route | Description |
+|--------|-------|-------------|
+| `GET` | `/health` | Backend status + API key check |
+| `POST` | `/api/connect` | Connect to a database via URL |
+| `GET` | `/api/connection` | Current connection info |
+| `POST` | `/api/upload` | Upload CSV / SQL file |
+| `GET` | `/api/schema` | Extract schema (tables, columns, FKs) |
+| `GET` | `/api/profile` | Statistical profiling of all columns |
+| `GET` | `/api/dictionary/quick` | AI-generated data dictionary |
+| `GET` | `/api/insights` | AI architectural insights |
+| `GET` | `/api/suggestions` | AI-suggested questions |
+| `POST` | `/chat` | Natural language → SQL → results |
+| `GET/PUT` | `/api/settings` | Platform configuration |
 
 ---
 
-## Step 6 — Start the frontend
+## 🏗 Tech Stack
 
-In a separate terminal:
-```powershell
-cd schemaiq
-npm run dev
-```
-
-Open http://localhost:5173, go to QueryBot, and ask anything!
-
----
-
-## Example queries that work
-
-| Question | What it does |
-|---|---|
-| How many orders were delivered in 2018? | COUNT with date filter |
-| Top 5 product categories by revenue | GROUP BY + SUM + ORDER |
-| Which state has the most customers? | GROUP BY state |
-| Average review score by category | JOIN 4 tables |
-| Total GMV of all delivered orders | SUM price + freight |
-| How many sellers are in São Paulo? | WHERE state = 'SP' |
-| Orders canceled in March 2018 | COUNT with date + status filter |
-| Most popular payment method | GROUP BY payment_type |
+| Layer | Technology |
+|-------|-----------|
+| Framework | **FastAPI** |
+| ORM / Inspector | **SQLAlchemy 2.0** |
+| AI | **Google Gemini 2.5 Flash** |
+| Data | **Pandas** |
+| ML | **scikit-learn**, **NetworkX** |
+| DB Drivers | **pymysql**, **psycopg2**, **pyodbc** |
 
 ---
 
-## Troubleshooting
+## 🚢 Deploy to Render
 
-**"Database not found"**
-→ Run `python load_data.py --data ./data`
+This repo includes `render.yaml` for one-click Render deployment.
 
-**"GEMINI_API_KEY not set"**
-→ Create `.env` file with your key
+1. Create a **Web Service** on Render
+2. Connect this repo
+3. Set environment variables:
+   - `GEMINI_API_KEY` — your Google AI API key
+   - `FRONTEND_URL` — your Netlify frontend URL (for CORS)
+4. Render will auto-detect `render.yaml` and deploy
 
-**"Backend not reachable"**
-→ Make sure `uvicorn main:app --reload` is running
-
-**CORS error in browser**
-→ Backend already allows `localhost:5173` — make sure both servers are running
-
-**SQL error from Gemini**
-→ Backend auto-retries once. If it keeps failing, the question may be too ambiguous — try rephrasing.
+**Start command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
 
 ---
 
-## File structure
+## 📁 Project Structure
 
 ```
-schemaiq-backend/
-├── main.py          ← FastAPI server + Gemini integration
-├── load_data.py     ← CSV → SQLite loader
-├── requirements.txt ← Python dependencies
-├── .env.example     ← API key template
-├── .env             ← Your actual API key (git-ignored)
-├── olist.db         ← Generated SQLite DB (after load_data.py)
-└── data/            ← Olist CSV files go here
-    ├── olist_customers_dataset.csv
-    └── ...
+├── main.py              # FastAPI app + routes
+├── render.yaml          # Render deployment config
+├── requirements.txt     # Python dependencies
+├── .env.example         # API key template
+├── routes/
+│   ├── connection.py    # DB connection management
+│   ├── schema.py        # Schema extraction
+│   ├── profile.py       # Data profiling
+│   ├── upload.py        # File upload (CSV/SQL)
+│   ├── dictionary.py    # AI data dictionary
+│   ├── insights.py      # AI insights
+│   └── settings.py      # Platform settings
+├── services/
+│   ├── schema_extractor/
+│   ├── relationship_mapper/
+│   └── data_profiler/
+├── db/
+│   ├── connection.py    # Engine state management
+│   ├── inspector.py     # SQLAlchemy inspection
+│   └── loader.py        # CSV/SQL → SQLite loader
+└── agent/
+    ├── monitor.py       # TWIF anomaly detection
+    ├── anomaly_model.py
+    └── rules_model.py
 ```
+
+---
+
+*Built by Team Kaizen for Code Apex — Track 2: AI Agents*

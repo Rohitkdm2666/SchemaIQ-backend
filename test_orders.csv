@@ -1,0 +1,4 @@
+order_id,customer_id,order_date,total_amount
+O001,C001,2025-01-03,120.50
+O002,C002,2025-01-04,75.00
+O003,C001,2025-01-05,220.00
