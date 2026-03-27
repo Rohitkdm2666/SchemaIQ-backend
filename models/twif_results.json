@@ -1,0 +1,339 @@
+{
+  "training": {
+    "model_name": "twif_olist",
+    "training_timestamp": "2026-03-26T23:15:09.432363",
+    "database_path": "E:\\Harsh\\VIT\\SY\\SEM IV\\Hackathons\\Code Apex\\Github\\SchemaIQ\\backend\\olist.db",
+    "database_info": {
+      "table_count": 9
+    },
+    "model_parameters": {
+      "n_estimators": 150,
+      "topology_weight": 0.4,
+      "relationship_boost": 1.8,
+      "contamination": 0.014754098360655738,
+      "random_state": 42
+    },
+    "topology_info": {
+      "tables_analyzed": 9,
+      "relationships_found": 0,
+      "feature_count": 18,
+      "topology_features": 5
+    },
+    "feature_importance": {
+      "row_count": 0.16604311502070362,
+      "column_count": 0.0990634797087117,
+      "avg_null_pct": 0.07049714726627901,
+      "max_null_pct": 0.10769412199155674,
+      "type_diversity": 0.08837348874963416,
+      "has_primary_key": 0.0,
+      "foreign_key_count": 0.0,
+      "avg_text_length": 0.10088248648450125,
+      "avg_coefficient_of_variation": 0.0,
+      "pk_to_col_ratio": 0.0
+    },
+    "status": "completed"
+  },
+  "detection": {
+    "tables": [
+      {
+        "table_name": "customers",
+        "is_anomaly": false,
+        "anomaly_score": 0.22001975940032287,
+        "anomaly_level": "normal",
+        "metrics": {
+          "table_name": "customers",
+          "row_count": 99441,
+          "column_count": 5,
+          "avg_null_pct": 0.0,
+          "max_null_pct": 0.0,
+          "type_diversity": 0.4,
+          "has_primary_key": 0,
+          "foreign_key_count": 0,
+          "avg_text_length": 19.086116390623587,
+          "avg_coefficient_of_variation": 0,
+          "pk_to_col_ratio": 0.0,
+          "fk_to_col_ratio": 0.0,
+          "topology_importance": 0.5980657798746224,
+          "relationship_strength": 0
+        },
+        "topology_insights": {
+          "connectivity_score": 5,
+          "relationship_types": [],
+          "importance_rank": 7,
+          "topology_factors": []
+        }
+      },
+      {
+        "table_name": "geolocation",
+        "is_anomaly": false,
+        "anomaly_score": 0.10535534577626676,
+        "anomaly_level": "normal",
+        "metrics": {
+          "table_name": "geolocation",
+          "row_count": 1000163,
+          "column_count": 5,
+          "avg_null_pct": 0.0,
+          "max_null_pct": 0.0,
+          "type_diversity": 0.6,
+          "has_primary_key": 0,
+          "foreign_key_count": 0,
+          "avg_text_length": 6.234132336429162,
+          "avg_coefficient_of_variation": 0,
+          "pk_to_col_ratio": 0.0,
+          "fk_to_col_ratio": 0.0,
+          "topology_importance": 0.6151971311302359,
+          "relationship_strength": 0
+        },
+        "topology_insights": {
+          "connectivity_score": 5,
+          "relationship_types": [],
+          "importance_rank": 5,
+          "topology_factors": []
+        }
+      },
+      {
+        "table_name": "order_items",
+        "is_anomaly": false,
+        "anomaly_score": 0.16885977727493834,
+        "anomaly_level": "normal",
+        "metrics": {
+          "table_name": "order_items",
+          "row_count": 112650,
+          "column_count": 7,
+          "avg_null_pct": 0.0,
+          "max_null_pct": 0.0,
+          "type_diversity": 0.42857142857142855,
+          "has_primary_key": 0,
+          "foreign_key_count": 0,
+          "avg_text_length": 28.75,
+          "avg_coefficient_of_variation": 0,
+          "pk_to_col_ratio": 0.0,
+          "fk_to_col_ratio": 0.0,
+          "topology_importance": 0.804057098048808,
+          "relationship_strength": 0
+        },
+        "topology_insights": {
+          "connectivity_score": 7,
+          "relationship_types": [],
+          "importance_rank": 3,
+          "topology_factors": []
+        }
+      },
+      {
+        "table_name": "order_payments",
+        "is_anomaly": false,
+        "anomaly_score": 0.21040849849344923,
+        "anomaly_level": "normal",
+        "metrics": {
+          "table_name": "order_payments",
+          "row_count": 103886,
+          "column_count": 5,
+          "avg_null_pct": 0.0,
+          "max_null_pct": 0.0,
+          "type_diversity": 0.6,
+          "has_primary_key": 0,
+          "foreign_key_count": 0,
+          "avg_text_length": 20.90536260901373,
+          "avg_coefficient_of_variation": 0,
+          "pk_to_col_ratio": 0.0,
+          "fk_to_col_ratio": 0.0,
+          "topology_importance": 0.5983903156601642,
+          "relationship_strength": 0
+        },
+        "topology_insights": {
+          "connectivity_score": 5,
+          "relationship_types": [],
+          "importance_rank": 6,
+          "topology_factors": []
+        }
+      },
+      {
+        "table_name": "order_reviews",
+        "is_anomaly": true,
+        "anomaly_score": -0.010531541276988188,
+        "anomaly_level": "mild",
+        "metrics": {
+          "table_name": "order_reviews",
+          "row_count": 99224,
+          "column_count": 7,
+          "avg_null_pct": 0.21006294560071875,
+          "max_null_pct": 0.8834153027493349,
+          "type_diversity": 0.2857142857142857,
+          "has_primary_key": 0,
+          "foreign_key_count": 0,
+          "avg_text_length": 32.716539108012924,
+          "avg_coefficient_of_variation": 0,
+          "pk_to_col_ratio": 0.0,
+          "fk_to_col_ratio": 0.0,
+          "topology_importance": 0.803115277559615,
+          "relationship_strength": 0
+        },
+        "topology_insights": {
+          "connectivity_score": 7,
+          "relationship_types": [],
+          "importance_rank": 4,
+          "topology_factors": []
+        }
+      },
+      {
+        "table_name": "orders",
+        "is_anomaly": false,
+        "anomaly_score": 0.1225581116320304,
+        "anomaly_level": "normal",
+        "metrics": {
+          "table_name": "orders",
+          "row_count": 99441,
+          "column_count": 8,
+          "avg_null_pct": 0.006169487434760311,
+          "max_null_pct": 0.02981667521444877,
+          "type_diversity": 0.125,
+          "has_primary_key": 0,
+          "foreign_key_count": 0,
+          "avg_text_length": 22.196689494272984,
+          "avg_coefficient_of_variation": 0,
+          "pk_to_col_ratio": 0.0,
+          "fk_to_col_ratio": 0.0,
+          "topology_importance": 0.9056643454397404,
+          "relationship_strength": 0
+        },
+        "topology_insights": {
+          "connectivity_score": 8,
+          "relationship_types": [],
+          "importance_rank": 2,
+          "topology_factors": []
+        }
+      },
+      {
+        "table_name": "product_category_name_translation",
+        "is_anomaly": false,
+        "anomaly_score": 0.08259050451240757,
+        "anomaly_level": "mild",
+        "metrics": {
+          "table_name": "product_category_name_translation",
+          "row_count": 71,
+          "column_count": 2,
+          "avg_null_pct": 0.0,
+          "max_null_pct": 0.0,
+          "type_diversity": 0.5,
+          "has_primary_key": 0,
+          "foreign_key_count": 0,
+          "avg_text_length": 16.52112676056338,
+          "avg_coefficient_of_variation": 0,
+          "pk_to_col_ratio": 0.0,
+          "fk_to_col_ratio": 0.0,
+          "topology_importance": 0.23680493428920316,
+          "relationship_strength": 0
+        },
+        "topology_insights": {
+          "connectivity_score": 2,
+          "relationship_types": [],
+          "importance_rank": 9,
+          "topology_factors": []
+        }
+      },
+      {
+        "table_name": "products",
+        "is_anomaly": false,
+        "anomaly_score": 0.07869401676416177,
+        "anomaly_level": "mild",
+        "metrics": {
+          "table_name": "products",
+          "row_count": 32951,
+          "column_count": 9,
+          "avg_null_pct": 0.008254681193287004,
+          "max_null_pct": 0.018512336499651,
+          "type_diversity": 0.2222222222222222,
+          "has_primary_key": 0,
+          "foreign_key_count": 0,
+          "avg_text_length": 23.479329643486597,
+          "avg_coefficient_of_variation": 0,
+          "pk_to_col_ratio": 0.0,
+          "fk_to_col_ratio": 0.0,
+          "topology_importance": 1.0,
+          "relationship_strength": 0
+        },
+        "topology_insights": {
+          "connectivity_score": 9,
+          "relationship_types": [],
+          "importance_rank": 1,
+          "topology_factors": []
+        }
+      },
+      {
+        "table_name": "sellers",
+        "is_anomaly": false,
+        "anomaly_score": 0.1574655252780785,
+        "anomaly_level": "normal",
+        "metrics": {
+          "table_name": "sellers",
+          "row_count": 3095,
+          "column_count": 4,
+          "avg_null_pct": 0.0,
+          "max_null_pct": 0.0,
+          "type_diversity": 0.5,
+          "has_primary_key": 0,
+          "foreign_key_count": 0,
+          "avg_text_length": 14.722347872913302,
+          "avg_coefficient_of_variation": 0,
+          "pk_to_col_ratio": 0.0,
+          "fk_to_col_ratio": 0.0,
+          "topology_importance": 0.4697843441059753,
+          "relationship_strength": 0
+        },
+        "topology_insights": {
+          "connectivity_score": 4,
+          "relationship_types": [],
+          "importance_rank": 8,
+          "topology_factors": []
+        }
+      }
+    ],
+    "summary": {
+      "total_tables": 9,
+      "anomaly_count": "1",
+      "anomaly_percentage": 11.11111111111111,
+      "avg_anomaly_score": 0.1261577775394075,
+      "model_contamination": 0.014754098360655738
+    },
+    "feature_importance": {
+      "row_count": 0.16604311502070362,
+      "column_count": 0.0990634797087117,
+      "avg_null_pct": 0.07049714726627901,
+      "max_null_pct": 0.10769412199155674,
+      "type_diversity": 0.08837348874963416,
+      "has_primary_key": 0.0,
+      "foreign_key_count": 0.0,
+      "avg_text_length": 0.10088248648450125,
+      "avg_coefficient_of_variation": 0.0,
+      "pk_to_col_ratio": 0.0,
+      "fk_to_col_ratio": 0.0,
+      "topology_importance": 0.14887193143871133,
+      "relationship_strength": 0.0,
+      "topology_row_interaction": 0.11637973327113776,
+      "topology_null_interaction": 0.05635603592312833,
+      "weighted_column_count": 0.08837329769955365,
+      "weighted_foreign_key_count": 0.0,
+      "weighted_has_primary_key": 0.0
+    },
+    "topology_summary": {
+      "tables_analyzed": 9,
+      "relationships_found": 0,
+      "topology_weight": 0.4
+    },
+    "detection_metadata": {
+      "model_name": "twif_olist",
+      "database_path": "E:\\Harsh\\VIT\\SY\\SEM IV\\Hackathons\\Code Apex\\Github\\SchemaIQ\\backend\\olist.db",
+      "detection_timestamp": "2026-03-26T23:15:10.723642",
+      "anomaly_threshold": null,
+      "twif_version": "1.0"
+    },
+    "insights": {
+      "key_findings": [
+        "1 tables (11.1%) show anomalous patterns"
+      ],
+      "recommendations": [],
+      "risk_assessment": "low"
+    }
+  },
+  "timestamp": "1774546880.5482109"
+}
