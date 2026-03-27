@@ -7,11 +7,11 @@ React Frontend (port 5173)
         ↓ POST /chat
 FastAPI Backend (port 8000)
         ↓
-Claude API (generates SQL)
+Google Gemini API (generates SQL)
         ↓
 SQLite DB (Olist CSVs)
         ↓
-Real query results → Claude formats → Frontend renders
+Real query results → Gemini formats → Frontend renders
 ```
 
 ---
@@ -65,14 +65,16 @@ pip install -r requirements.txt
 # Copy the example env file
 copy .env.example .env
 
-# Open .env and paste your Anthropic API key
-# Get one from: https://console.anthropic.com/
+# Open .env and paste your Gemini API key
+# Get one from: https://aistudio.google.com/app/apikey
 ```
 
 Your `.env` should look like:
 ```
-ANTHROPIC_API_KEY=sk-ant-api03-...
+GEMINI_API_KEY=your-gemini-api-key-here
 ```
+
+If you deploy on Render, set `GEMINI_API_KEY` and `DATABASE_URL` under service environment variables.
 
 ---
 
@@ -144,7 +146,7 @@ Open http://localhost:5173, go to QueryBot, and ask anything!
 **"Database not found"**
 → Run `python load_data.py --data ./data`
 
-**"ANTHROPIC_API_KEY not set"**
+**"GEMINI_API_KEY not set"**
 → Create `.env` file with your key
 
 **"Backend not reachable"**
@@ -153,7 +155,7 @@ Open http://localhost:5173, go to QueryBot, and ask anything!
 **CORS error in browser**
 → Backend already allows `localhost:5173` — make sure both servers are running
 
-**SQL error from Claude**
+**SQL error from Gemini**
 → Backend auto-retries once. If it keeps failing, the question may be too ambiguous — try rephrasing.
 
 ---
@@ -162,7 +164,7 @@ Open http://localhost:5173, go to QueryBot, and ask anything!
 
 ```
 schemaiq-backend/
-├── main.py          ← FastAPI server + Claude integration
+├── main.py          ← FastAPI server + Gemini integration
 ├── load_data.py     ← CSV → SQLite loader
 ├── requirements.txt ← Python dependencies
 ├── .env.example     ← API key template
