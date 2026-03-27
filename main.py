@@ -269,7 +269,10 @@ class SuggestionsResponse(BaseModel):
 # ── Routes ────────────────────────────────────────────────────────────────────
 @app.get("/")
 def root():
-    return {"status": "SchemaIQ DB-Agnostic Engine", "db_url": DB_URL.split('@')[-1] if '@' in DB_URL else DB_URL, "ready": engine is not None}
+    db_display = None
+    if DB_URL:
+        db_display = DB_URL.split('@')[-1] if '@' in DB_URL else DB_URL
+    return {"status": "SchemaIQ DB-Agnostic Engine", "db_url": db_display, "ready": engine is not None}
 
 @app.get("/health")
 def health():
